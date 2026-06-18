@@ -6,3 +6,6 @@
 
 # OS
 .DS_Store
+
+# if i would forget to add locally
+target/
