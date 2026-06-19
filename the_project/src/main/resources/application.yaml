@@ -1,0 +1,13 @@
+spring:
+  main:
+    banner-mode: OFF
+
+  application:
+    name: the_project
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    root: warn
