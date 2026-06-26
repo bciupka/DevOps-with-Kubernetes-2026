@@ -1,23 +1,59 @@
 package logoutput;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+@SpringBootApplication
+@EnableScheduling
 public class Main {
     public static void main(String[] args) {
-        String randomString = UUID.randomUUID().toString();
+        SpringApplication.run(Main.class, args);
+    }
+}
 
-        try (ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor()) {
-            executorService.scheduleAtFixedRate(() -> {
-                IO.println(Instant.now() + ": " + randomString);
-            }, 0, 5, TimeUnit.SECONDS);
+@Service
+class LogOutputService {
+    private static final String randomString = UUID.randomUUID().toString();
 
-            Thread.currentThread().join();
-        } catch (Exception e) {
-            IO.println("We've got some problem: " + e.getMessage());
-        }
+    public String getRandomStringWithTimestamp() {
+        return Instant.now() + ": " + randomString;
+    }
+}
+
+@RestController
+class LogOutputController {
+    private final LogOutputService logOutputService;
+
+    public LogOutputController(LogOutputService logOutputService) {
+        this.logOutputService = logOutputService;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> getRandomStringLog() {
+        return ResponseEntity.ok(logOutputService.getRandomStringWithTimestamp());
+    }
+}
+
+@Component
+class LogOutputConsoleController {
+    private final LogOutputService logOutputService;
+
+    public LogOutputConsoleController(LogOutputService logOutputService) {
+        this.logOutputService = logOutputService;
+    }
+
+    @Scheduled(fixedRate = 5_000)
+    public void logOutputToConsole() {
+        IO.println(logOutputService.getRandomStringWithTimestamp());
     }
 }

@@ -14,5 +14,7 @@ spec:
     spec:
       containers:
         - name: logoutput
-          image: log-output:1.01
+          image: log-output:1.02
           imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8000
