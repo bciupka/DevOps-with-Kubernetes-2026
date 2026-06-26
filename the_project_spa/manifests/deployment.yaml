@@ -16,3 +16,5 @@ spec:
         - name: theproject
           image: the-project:1.01
           imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80

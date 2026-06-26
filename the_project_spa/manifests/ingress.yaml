@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: theproject-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: theproject-svc
+                port:
+                  number: 1234
+            pathType: Prefix
+            path: /
