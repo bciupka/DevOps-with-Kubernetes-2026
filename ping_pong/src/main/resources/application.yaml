@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ping_pong
+
+server:
+  port: 8000
