@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logoutput-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logoutput
+  template:
+    metadata:
+      labels:
+        app: logoutput
+    spec:
+      volumes:
+        - name: shared-files
+          emptyDir: {}
+      containers:
+        - name: log-output-reader
+          image: log-output-reader:1.00
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OUTPUT_FILE
+              value: /usr/src/app/files/outputFile.txt
+          volumeMounts:
+            - name: shared-files
+              mountPath: /usr/src/app/files
+
+        - name: log-output-writer
+          image: log-output-writer:1.00
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OUTPUT_FILE
+              value: /usr/src/app/files/outputFile.txt
+          volumeMounts:
+            - name: shared-files
+              mountPath: /usr/src/app/files
+
+
+
