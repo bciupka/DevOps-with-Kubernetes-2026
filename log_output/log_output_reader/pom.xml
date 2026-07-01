@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>pl.bartlomiejciupka.devopswithkubernetes</groupId>
-    <artifactId>log-output</artifactId>
+    <artifactId>log-output-reader</artifactId>
     <version>1.02.0</version>
     <packaging>jar</packaging>
 
