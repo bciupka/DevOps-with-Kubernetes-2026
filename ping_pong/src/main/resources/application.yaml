@@ -3,4 +3,4 @@ spring:
     name: ping_pong
 
 server:
-  port: 8000
+  port: 8001

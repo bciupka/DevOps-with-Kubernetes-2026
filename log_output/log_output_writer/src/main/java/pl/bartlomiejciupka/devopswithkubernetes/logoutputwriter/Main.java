@@ -27,9 +27,9 @@ public class Main {
             ScheduledFuture<?> task = executorService.scheduleAtFixedRate(() -> {
                         try {
                             Files.writeString
-                                    (outputFilePath, Instant.now() + ": " + randomString + System.lineSeparator(),
+                                    (outputFilePath, Instant.now() + ": " + randomString,
                                     StandardCharsets.UTF_8, StandardOpenOption.CREATE,
-                                    StandardOpenOption.APPEND);
+                                    StandardOpenOption.TRUNCATE_EXISTING);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

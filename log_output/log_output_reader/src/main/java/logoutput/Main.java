@@ -26,12 +26,25 @@ class LogOutputService {
         Path outputFilePath = Path.of(System.getenv()
                 .getOrDefault("OUTPUT_FILE", "../outputFile.txt"));
         try {
-            fileContent = Files.readString(outputFilePath);
+            fileContent = Files.readString(outputFilePath).trim();
         } catch (IOException e) {
-            return "Ooops... file not found";
+            return "Ooops... log output file not found";
         }
 
         return fileContent;
+    }
+
+    public String getPongCount() {
+        String fileContent;
+        Path outputFilePath = Path.of(System.getenv()
+                .getOrDefault("PONG_FILE", "../../ping_pong/pongFile.txt"));
+        try {
+            fileContent = Files.readString(outputFilePath).trim();
+        } catch (IOException e) {
+            return "Ooops... pong output file not found";
+        }
+
+        return "Ping / Pongs: " + fileContent;
     }
 }
 
@@ -45,6 +58,9 @@ class LogOutputController {
 
     @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getLogOutput() {
-        return ResponseEntity.ok(logOutputService.getLogOutputString());
+        String out = logOutputService.getLogOutputString() +
+                System.lineSeparator() + logOutputService.getPongCount();
+
+        return ResponseEntity.ok(out);
     }
 }

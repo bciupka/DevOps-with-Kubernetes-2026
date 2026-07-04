@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @SpringBootApplication
 public class PingPongApplication {
@@ -21,10 +25,44 @@ public class PingPongApplication {
 
 @Service
 class PingPongService {
-    private static final AtomicInteger count = new AtomicInteger();
+    private final Path pongFilepath = Path.of(System.getenv()
+            .getOrDefault("PONG_FILE", "./pongFile.txt"));
 
-    public String doPong() {
-        return "pong " + count.getAndIncrement();
+    public PingPongService() {
+        try {
+            if (!Files.exists(pongFilepath)) {
+                Files.createDirectories(pongFilepath.getParent());
+                Files.writeString(pongFilepath, "0", StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public synchronized String doPong() {
+        String pongCountString;
+        try {
+            pongCountString = Files.readString(pongFilepath).trim();
+        } catch (IOException e) {
+            pongCountString = "0";
+        }
+
+        int pongCount = Integer.parseInt(pongCountString);
+
+        try {
+            Files.writeString(
+                    pongFilepath,
+                    String.valueOf(pongCount + 1),
+                    StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "pong " + pongCount;
     }
 }
 
