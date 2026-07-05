@@ -14,3 +14,4 @@
 - [1.8](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/1.8/the_project_spa)
 - [1.9](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/1.9/log_output_ping_pong)
 - [1.10](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/1.10/log_output)
+- [1.11](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/1.11/log_output_ping_pong)
