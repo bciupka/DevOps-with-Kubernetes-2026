@@ -12,9 +12,31 @@ spec:
       labels:
         app: logoutput
     spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: log-pong-pvc
       containers:
-        - name: logoutput
-          image: log-output:1.02
-          imagePullPolicy: "IfNotPresent"
+        - name: log-output-reader
+          image: log-output-reader:1.01
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
+          env:
+            - name: OUTPUT_FILE
+              value: /usr/src/app/files/outputFile.txt
+            - name: PONG_FILE
+              value: /usr/src/app/files/pongFile.txt
+          volumeMounts:
+            - name: shared-files
+              mountPath: /usr/src/app/files
+
+        - name: log-output-writer
+          image: log-output-writer:1.01
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OUTPUT_FILE
+              value: /usr/src/app/files/outputFile.txt
+          volumeMounts:
+            - name: shared-files
+              mountPath: /usr/src/app/files

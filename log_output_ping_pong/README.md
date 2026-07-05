@@ -1,12 +1,27 @@
-# Logoutput + pingpong apps
+# Log output + Ping-pong apps
 
-# 1. [pingpong-app](../ping_pong)
-- `docker build -t ping-pong:1.00 ../ping_pong`
-- `k3d image import ping-pong:1.00`
+## Build images
 
-# 2. [logoutput-app](../log_output)
-- `docker build -t log-output:1.02 ../log_ouptut`
-- `k3d image import log-output:1.02`
+- `docker build -t log-output-reader:1.01 ../log_output/log_output_reader`
+- `docker build -t log-output-writer:1.01 ../log_output/log_output_writer`
+- `docker build -t ping-pong:1.01 ../ping_pong`
 
-# 3. Deployment
+## Import images to k3d
+
+- `k3d image import log-output-reader:1.01`
+- `k3d image import log-output-writer:1.01`
+- `k3d image import ping-pong:1.01`
+
+## Prepare persistent volume
+
+- `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube`
+- `kubectl apply -f infrastructure`
+
+## Deploy
+
 - `kubectl apply -f manifests`
+
+## Endpoints
+
+- `/` - log output with ping-pong count
+- `/pingpong` - ping-pong counter

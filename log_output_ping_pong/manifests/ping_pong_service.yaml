@@ -9,4 +9,4 @@ spec:
   ports:
     - port: 1234
       protocol: TCP
-      targetPort: 8000
+      targetPort: 8001
