@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: theproject-spa-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: theprojectspa
+  template:
+    metadata:
+      labels:
+        app: theprojectspa
+    spec:
+      containers:
+        - name: theprojectspa
+          image: the-project-spa:1.00
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80

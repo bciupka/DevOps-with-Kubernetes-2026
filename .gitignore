@@ -9,3 +9,4 @@
 
 # if i would forget to add locally
 target/
+node_modules/

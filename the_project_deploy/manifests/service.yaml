@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: theproject-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: theproject
+  ports:
+    - port: 1234
+      targetPort: 4321
+      protocol: TCP

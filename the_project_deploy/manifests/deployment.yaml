@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: theproject-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: theproject
+  template:
+    metadata:
+      labels:
+        app: theproject
+    spec:
+      volumes:
+        - name: cache-files
+          persistentVolumeClaim:
+            claimName: the-project-pvc
+      containers:
+        - name: theproject
+          image: the-project:1.00
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: PORT
+              value: "4321"
+            - name: IMAGE_FILE
+              value: /usr/src/app/files/image.jpg
+            - name: TIMESTAMP_FILE
+              value: /usr/src/app/files/timestamp.txt
+          volumeMounts:
+            - mountPath: /usr/src/app/files
+              name: cache-files
