@@ -8,3 +8,6 @@ logging:
 
 server:
   port: 8000
+
+pingpong:
+  uri: ${PINGPONG_URL:http://pingpong-svc:1234/pingpong}

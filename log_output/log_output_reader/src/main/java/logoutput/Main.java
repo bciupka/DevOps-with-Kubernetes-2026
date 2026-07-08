@@ -1,12 +1,15 @@
 package logoutput;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,10 +20,25 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
+
+    @Bean
+    public RestClient restClient() {
+        return RestClient.create();
+    }
 }
+
 
 @Service
 class LogOutputService {
+    private final RestClient restClient;
+
+    @Value("${pingpong.uri}")
+    private String pingPongUri;
+
+    public LogOutputService(RestClient restClient) {
+        this.restClient = restClient;
+    }
+
     public String getLogOutputString() {
         String fileContent;
         Path outputFilePath = Path.of(System.getenv()
@@ -35,16 +53,13 @@ class LogOutputService {
     }
 
     public String getPongCount() {
-        String fileContent;
-        Path outputFilePath = Path.of(System.getenv()
-                .getOrDefault("PONG_FILE", "../../ping_pong/pongFile.txt"));
-        try {
-            fileContent = Files.readString(outputFilePath).trim();
-        } catch (IOException e) {
-            return "Ooops... pong output file not found";
-        }
+        String response = restClient.get()
+                .uri(pingPongUri + "/pings")
+                .retrieve()
+                .requiredBody(String.class);
 
-        return "Ping / Pongs: " + fileContent;
+
+        return "Ping / Pongs: " + response;
     }
 }
 

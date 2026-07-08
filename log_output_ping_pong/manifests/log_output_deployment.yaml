@@ -14,25 +14,25 @@ spec:
     spec:
       volumes:
         - name: shared-files
-          persistentVolumeClaim:
-            claimName: log-pong-pvc
+          emptyDir: {}
       containers:
         - name: log-output-reader
-          image: log-output-reader:1.01
+          image: log-output-reader:1.00
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           env:
+            - name: PINGPONG_URL
+              value: http://pingpong-svc:1234/pingpong
             - name: OUTPUT_FILE
               value: /usr/src/app/files/outputFile.txt
-            - name: PONG_FILE
-              value: /usr/src/app/files/pongFile.txt
           volumeMounts:
             - name: shared-files
               mountPath: /usr/src/app/files
 
+
         - name: log-output-writer
-          image: log-output-writer:1.01
+          image: log-output-writer:1.00
           imagePullPolicy: IfNotPresent
           env:
             - name: OUTPUT_FILE

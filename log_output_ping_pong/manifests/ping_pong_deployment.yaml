@@ -12,20 +12,10 @@ spec:
       labels:
         app: pingpong
     spec:
-      volumes:
-        - name: shared-files
-          persistentVolumeClaim:
-            claimName: log-pong-pvc
       containers:
         - name: pingpong
-          image: ping-pong:1.01
+          image: ping-pong:1.00
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8001
-          env:
-            - name: PONG_FILE
-              value: /usr/src/app/files/pongFile.txt
-          volumeMounts:
-            - name: shared-files
-              mountPath: /usr/src/app/files
 
