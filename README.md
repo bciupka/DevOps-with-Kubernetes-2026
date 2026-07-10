@@ -21,3 +21,4 @@
 ### Chapter 3
 
 - [2.1](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.1/log_output_ping_pong)
+- [2.2](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.2/the_project_deploy)
