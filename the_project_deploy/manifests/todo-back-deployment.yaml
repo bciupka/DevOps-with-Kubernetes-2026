@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-project-todo-back-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: the-project-todo-back
+  template:
+    metadata:
+      labels:
+        app: the-project-todo-back
+    spec:
+      containers:
+        - image: the-project-todo-back:1.00
+          name: the-project-todo-back
+          imagePullPolicy: IfNotPresent
+

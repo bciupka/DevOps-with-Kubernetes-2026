@@ -4,11 +4,13 @@
 
 - `docker build -t the-project:1.00 ../the_project`
 - `docker build -t the-project-spa:1.00 ../the_project_spa`
+- `docker build -t the-project-todo-back:1.00 ../the_project_todo_back`
 
 ## Import images to k3d
 
 - `k3d image import the-project:1.00`
 - `k3d image import the-project-spa:1.00`
+- `k3d image import the-project-todo-back:1.00`
 
 ## Prepare persistent volume
 
@@ -23,3 +25,5 @@
 
 - `/` - frontend
 - `/api/image` - cached image
+- `GET /api/todos` - list todos
+- `POST /api/todos` - create todo
