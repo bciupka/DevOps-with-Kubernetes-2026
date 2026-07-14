@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: the-project-todo-back-svc
+  namespace: project
 spec:
   type: ClusterIP
   selector:
