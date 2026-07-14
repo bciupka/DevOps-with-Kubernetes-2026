@@ -14,7 +14,8 @@
 
 ## Infrastructure
 
-Do not apply `infrastructure` for this exercise.
+Do not apply whole `infrastructure` for this exercise.
+- `kubectl apply -f infrastructure/namespace.yaml`
 
 ## Deploy
 
