@@ -61,6 +61,24 @@ class LogOutputService {
 
         return "Ping / Pongs: " + response;
     }
+
+    public String getMessageEnv() {
+        String messageEnv = System.getenv().getOrDefault("MESSAGE", null);
+        return "env variable: MESSAGE=" + (messageEnv == null ? "No MESSAGE ENV found" : messageEnv);
+    }
+
+    public String getConfigFileContent() {
+        Path path = Path.of("./config/information.txt");
+        if (Files.exists(path)) {
+            try {
+                return "file content: " + Files.readString(path).trim();
+            } catch (IOException e) {
+                return "Ooops... error while reading information.txt";
+            }
+        }
+
+        return "file content: no information.txt file found";
+    }
 }
 
 @RestController
@@ -73,7 +91,9 @@ class LogOutputController {
 
     @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getLogOutput() {
-        String out = logOutputService.getLogOutputString() +
+        String out = logOutputService.getConfigFileContent() +
+                System.lineSeparator() + logOutputService.getMessageEnv() +
+                System.lineSeparator() + logOutputService.getLogOutputString() +
                 System.lineSeparator() + logOutputService.getPongCount();
 
         return ResponseEntity.ok(out);

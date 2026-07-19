@@ -16,6 +16,12 @@ spec:
       volumes:
         - name: shared-files
           emptyDir: {}
+        - name: config-map
+          configMap:
+            name: log-output-configmap
+            items:
+              - key: "information.txt"
+                path: "information.txt"
       containers:
         - name: log-output-reader
           image: log-output-reader:1.00
@@ -27,9 +33,18 @@ spec:
               value: http://pingpong-svc:1234/pingpong
             - name: OUTPUT_FILE
               value: /usr/src/app/files/outputFile.txt
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-configmap
+                  key: message
+
           volumeMounts:
             - name: shared-files
               mountPath: /usr/src/app/files
+            - name: config-map
+              mountPath: /app/config
+              readOnly: true
 
 
         - name: log-output-writer

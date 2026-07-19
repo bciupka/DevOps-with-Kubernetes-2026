@@ -15,11 +15,15 @@
 ## Infrastructure
 
 Do not apply whole `infrastructure` for this exercise.
+
 - `kubectl apply -f infrastructure/namespace.yaml`
 
 ## Deploy
 
 - `kubectl apply -f manifests`
+
+The deployment loads `MESSAGE` from `log-output-configmap` and mounts
+`information.txt` at `/app/config/information.txt`.
 
 ## Endpoints
 
