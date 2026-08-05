@@ -21,13 +21,15 @@ spec:
         - name: theproject
           image: the-project:1.00
           imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - configMapRef:
+                name: the-project-configmap
           env:
             - name: PORT
-              value: "4321"
-            - name: IMAGE_FILE
-              value: /usr/src/app/files/image.jpg
-            - name: TIMESTAMP_FILE
-              value: /usr/src/app/files/timestamp.txt
+              valueFrom:
+                configMapKeyRef:
+                  name: the-project-configmap
+                  key: THE_PROJECT_PORT
           volumeMounts:
             - mountPath: /usr/src/app/files
               name: cache-files

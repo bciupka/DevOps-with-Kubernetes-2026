@@ -6,7 +6,7 @@ spring:
     name: the_project
 
 server:
-  port: ${PORT:8080}
+  port: ${PORT}
 
 logging:
   level:

@@ -13,12 +13,10 @@ import java.time.Instant;
 
 @Service
 public class ImageService {
-    private final Path imagePath = Path.of(System.getenv().getOrDefault(
-            "IMAGE_FILE", "./image.jpg"
-    ));
-    private final Path timestampFile = Path.of(System.getenv().getOrDefault(
-            "TIMESTAMP_FILE", "./timestamp.txt"
-    ));
+    private final Path imagePath = Path.of(System.getenv().get("IMAGE_FILE"));
+    private final Path timestampFile = Path.of(System.getenv().get("TIMESTAMP_FILE"));
+    private final String imageUrl = System.getenv().get("IMAGE_URL");
+    private final int imageTtl = Integer.parseInt(System.getenv().get("IMAGE_TTL_MINUTES"));
     private final RestClient restClient;
 
     public ImageService(RestClient restClient) {
@@ -31,9 +29,9 @@ public class ImageService {
         try {
             Instant lastChange = Instant.parse(Files.readString(timestampFile).trim());
             byte[] currImage = Files.readAllBytes(imagePath);
-            if (Instant.now().minus(Duration.ofMinutes(10)).isAfter(lastChange)) {
+            if (Instant.now().minus(Duration.ofMinutes(imageTtl)).isAfter(lastChange)) {
                 byte[] newImage = restClient.get()
-                        .uri("https://picsum.photos/1200")
+                        .uri(imageUrl)
                         .retrieve()
                         .body(byte[].class);
 
@@ -65,7 +63,7 @@ public class ImageService {
         if (!Files.exists(imagePath) || !Files.exists(timestampFile)) {
             try {
                 byte[] image = restClient.get()
-                        .uri("https://picsum.photos/1200")
+                        .uri(imageUrl)
                         .retrieve()
                         .body(byte[].class);
 

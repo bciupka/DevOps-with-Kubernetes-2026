@@ -3,4 +3,4 @@ spring:
     name: the_project_todo_back
 
 server:
-  port: 8080
+  port: ${PORT}
