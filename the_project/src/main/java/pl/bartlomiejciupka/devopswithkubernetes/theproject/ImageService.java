@@ -6,42 +6,38 @@ import org.springframework.web.client.RestClient;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.time.Duration;
 import java.time.Instant;
 
 @Service
 public class ImageService {
-    private final Path imagePath = Path.of(System.getenv().get("IMAGE_FILE"));
-    private final Path timestampFile = Path.of(System.getenv().get("TIMESTAMP_FILE"));
-    private final String imageUrl = System.getenv().get("IMAGE_URL");
-    private final int imageTtl = Integer.parseInt(System.getenv().get("IMAGE_TTL_MINUTES"));
     private final RestClient restClient;
+    private final ImageProperties imageProperties;
 
-    public ImageService(RestClient restClient) {
+    public ImageService(RestClient restClient, ImageProperties imageProperties) {
         this.restClient = restClient;
+        this.imageProperties = imageProperties;
     }
 
     public byte[] getImage() {
         checkAndCreateFiles();
 
         try {
-            Instant lastChange = Instant.parse(Files.readString(timestampFile).trim());
-            byte[] currImage = Files.readAllBytes(imagePath);
-            if (Instant.now().minus(Duration.ofMinutes(imageTtl)).isAfter(lastChange)) {
+            Instant lastChange = Instant.parse(Files.readString(imageProperties.timestampFile()).trim());
+            byte[] currImage = Files.readAllBytes(imageProperties.imageFile());
+            if (Instant.now().minus(imageProperties.imageTtlMinutes()).isAfter(lastChange)) {
                 byte[] newImage = restClient.get()
-                        .uri(imageUrl)
+                        .uri(imageProperties.imageUrl())
                         .retrieve()
                         .body(byte[].class);
 
                 if (newImage == null) {
                     throw new RuntimeException("Image download fail");
                 }
-                Files.write(imagePath, newImage, StandardOpenOption.CREATE,
+                Files.write(imageProperties.imageFile(), newImage, StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);
 
-                Files.writeString(timestampFile, Instant.now().toString(),
+                Files.writeString(imageProperties.timestampFile(), Instant.now().toString(),
                         StandardCharsets.UTF_8, StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);
 
@@ -54,16 +50,16 @@ public class ImageService {
 
     private void checkAndCreateFiles() {
         try {
-            Files.createDirectories(imagePath.getParent());
-            Files.createDirectories(timestampFile.getParent());
+            Files.createDirectories(imageProperties.imageFile().getParent());
+            Files.createDirectories(imageProperties.timestampFile().getParent());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        if (!Files.exists(imagePath) || !Files.exists(timestampFile)) {
+        if (!Files.exists(imageProperties.imageFile()) || !Files.exists(imageProperties.timestampFile())) {
             try {
                 byte[] image = restClient.get()
-                        .uri(imageUrl)
+                        .uri(imageProperties.imageUrl())
                         .retrieve()
                         .body(byte[].class);
 
@@ -71,10 +67,10 @@ public class ImageService {
                     throw new RuntimeException("Image download fail");
                 }
 
-                Files.write(imagePath, image, StandardOpenOption.CREATE,
+                Files.write(imageProperties.imageFile(), image, StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);
 
-                Files.writeString(timestampFile, Instant.now().toString(),
+                Files.writeString(imageProperties.timestampFile(), Instant.now().toString(),
                         StandardCharsets.UTF_8,
                         StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);

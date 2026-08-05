@@ -12,14 +12,19 @@
 - `k3d image import the-project-spa:1.00`
 - `k3d image import the-project-todo-back:1.00`
 
-## Prepare persistent volume
+## Prepare infrastructure
 
+- `kubectl apply -f namespace.yaml`
 - `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/project/kube`
 - `kubectl apply -f infrastructure`
 
 ## Deploy
 
 - `kubectl apply -f manifests`
+
+## Configuration
+
+Runtime configuration is defined in `manifests/configmap.yaml`.
 
 ## Endpoints
 

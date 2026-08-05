@@ -11,3 +11,10 @@ server:
 logging:
   level:
     root: warn
+
+app:
+  image:
+    image-file: ${IMAGE_FILE}
+    timestamp-file: ${TIMESTAMP_FILE}
+    image-url: ${IMAGE_URL}
+    image-ttl-minutes: ${IMAGE_TTL_MINUTES}
