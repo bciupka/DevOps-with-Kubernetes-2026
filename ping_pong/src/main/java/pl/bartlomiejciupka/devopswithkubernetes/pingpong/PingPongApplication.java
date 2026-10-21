@@ -1,15 +1,16 @@
 package pl.bartlomiejciupka.devopswithkubernetes.pingpong;
 
+import jakarta.transaction.Transactional;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootApplication
 public class PingPongApplication {
@@ -18,18 +19,39 @@ public class PingPongApplication {
         SpringApplication.run(PingPongApplication.class, args);
     }
 
+
+    @Bean
+    public CommandLineRunner init(PingPongService pingPongService) {
+        return args -> pingPongService.initializePong();
+    }
 }
+
 
 @Service
 class PingPongService {
-    private final AtomicInteger pongCount = new AtomicInteger();
+    private final PongsRepo pongsRepo;
+
+    PingPongService(PongsRepo pongsRepo) {
+        this.pongsRepo = pongsRepo;
+    }
 
     public String doPong() {
-        return "pong " + pongCount.getAndIncrement();
+        int prevVal = pongsRepo.incrementAmountAndReturnPreviousValue().orElseThrow();
+        return "pong " + prevVal;
     }
 
     public String getCount() {
-        return String.valueOf(pongCount.get());
+        int cur = pongsRepo.findAll().stream().findFirst().orElseThrow().amount;
+        return String.valueOf(cur);
+    }
+
+    @Transactional
+    public void initializePong() {
+        pongsRepo.lockPongsTable();
+
+        if (pongsRepo.count() == 0) {
+            pongsRepo.save(new Pongs());
+        }
     }
 }
 

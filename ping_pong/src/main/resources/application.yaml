@@ -1,6 +1,12 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://postgres-svc:5432/pingpong
+    username: pingpong
+    password: password
   application:
     name: ping_pong
-
+  jpa:
+    hibernate:
+      ddl-auto: update
 server:
   port: 8001

@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-svc
+  namespace: exercises
+spec:
+  selector:
+    app: postgres-app
+  ports:
+    - protocol: TCP
+      port: 5432
+      name: db
+  clusterIP: None
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-ss
+  namespace: exercises
+  labels:
+    app: postgres-ss
+spec:
+  selector:
+    matchLabels:
+      app: postgres-app
+  serviceName: postgres-svc
+  replicas: 1
+  template:
+    metadata:
+      name: postgres-app
+      labels:
+        app: postgres-app
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:18
+          env:
+            - name: POSTGRES_DB
+              value: pingpong
+            - name: POSTGRES_USER
+              value: pingpong
+            - name: POSTGRES_PASSWORD
+              value: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: postgres-data-storage
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 200Mi
