@@ -12,18 +12,13 @@
 - `k3d image import log-output-writer:1.00`
 - `k3d image import ping-pong:1.00`
 
-## Infrastructure
+## Namespace
 
-Do not apply whole `infrastructure` for this exercise.
-
-- `kubectl apply -f infrastructure/namespace.yaml`
+- `kubectl apply -f namespace.yaml`
 
 ## Deploy
 
 - `kubectl apply -f manifests`
-
-The deployment loads `MESSAGE` from `log-output-configmap` and mounts
-`information.txt` at `/app/config/information.txt`.
 
 ## Endpoints
 
