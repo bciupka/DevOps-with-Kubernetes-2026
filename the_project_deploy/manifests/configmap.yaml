@@ -10,3 +10,7 @@ data:
   IMAGE_TTL_MINUTES: "10"
   IMAGE_URL: "https://picsum.photos/1200"
   TODO_BACKEND_PORT: "8080"
+
+  TODO_POSTGRES_URL: jdbc:postgresql://postgres-svc:5432/todo
+  TODO_POSTGRES_DB: todo
+  TODO_POSTGRES_USER: todo

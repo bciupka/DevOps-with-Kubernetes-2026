@@ -1,6 +1,14 @@
 spring:
   application:
     name: the_project_todo_back
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 server:
   port: ${PORT}

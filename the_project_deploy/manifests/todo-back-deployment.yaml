@@ -23,4 +23,19 @@ spec:
                 configMapKeyRef:
                   name: the-project-configmap
                   key: TODO_BACKEND_PORT
+            - name: POSTGRES_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: the-project-configmap
+                  key: TODO_POSTGRES_URL
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: the-project-configmap
+                  key: TODO_POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: the-project-secret
+                  key: TODO_POSTGRES_PASSWORD
 

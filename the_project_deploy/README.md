@@ -24,7 +24,7 @@
 
 ## Configuration
 
-Runtime configuration is defined in `manifests/configmap.yaml`.
+Runtime configuration is defined in `manifests/configmap.yaml` and `manifests/secret.yaml`.
 
 ## Endpoints
 

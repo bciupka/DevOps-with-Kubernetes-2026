@@ -5,22 +5,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Item, ItemContent, ItemGroup } from "@/components/ui/item";
 import { Controller, useForm } from "react-hook-form";
-import { type Todo, todoSchema } from "@/features/todos/schema";
+import { type TodoCreate, todoCreateSchema } from "@/features/todos/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldError } from "@/components/ui/field";
 import { useCreateTodoMutation } from "@/features/todos/mutations";
 
 function App() {
-  const form = useForm<Todo>({
-    resolver: zodResolver(todoSchema),
+  const form = useForm<TodoCreate>({
+    resolver: zodResolver(todoCreateSchema),
     defaultValues: {
-      desc: "",
+      description: "",
     },
   });
 
   const createTodoMutation = useCreateTodoMutation();
 
-  function onSubmit(todo: Todo) {
+  function onSubmit(todo: TodoCreate) {
     createTodoMutation.mutate(todo, {
       onSuccess: () => form.reset(),
     });
@@ -51,7 +51,7 @@ function App() {
           className="flex gap-2 my-3 w-lg"
         >
           <Controller
-            name="desc"
+            name="description"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
@@ -72,14 +72,14 @@ function App() {
         </form>
         <h2 className="font-bold my-5 text-2xl">Todos</h2>
         <ItemGroup className="w-xl gap-2">
-          {todos.map((todo, index) => {
+          {todos.map((todo) => {
             return (
               <Item
-                key={index}
+                key={todo.id}
                 variant="outline"
                 className="border-l-6 border-primary hover:bg-muted"
               >
-                <ItemContent>{todo.desc}</ItemContent>
+                <ItemContent>{todo.description}</ItemContent>
               </Item>
             );
           })}

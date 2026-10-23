@@ -1,4 +1,4 @@
-import { type Todo } from "@/features/todos/schema";
+import { type Todo, type TodoCreate } from "@/features/todos/schema";
 import { apiClient } from "@/lib/api-client";
 
 export async function getTodos(): Promise<Todo[]> {
@@ -6,7 +6,7 @@ export async function getTodos(): Promise<Todo[]> {
   return res.data;
 }
 
-export async function createTodo(todo: Todo): Promise<Todo> {
+export async function createTodo(todo: TodoCreate): Promise<Todo> {
   const res = await apiClient.post<Todo>("/todos", todo);
   return res.data;
 }
