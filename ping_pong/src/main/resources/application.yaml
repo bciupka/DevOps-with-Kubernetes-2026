@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres-svc:5432/pingpong
-    username: pingpong
-    password: password
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   application:
     name: ping_pong
   jpa:

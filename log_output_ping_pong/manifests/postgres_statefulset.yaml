@@ -38,11 +38,20 @@ spec:
           image: postgres:18
           env:
             - name: POSTGRES_DB
-              value: pingpong
+              valueFrom:
+                configMapKeyRef:
+                  name: ping-pong-configmap
+                  key: POSTGRES_DB
             - name: POSTGRES_USER
-              value: pingpong
+              valueFrom:
+                configMapKeyRef:
+                  name: ping-pong-configmap
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: ping-pong-secret
           ports:
             - containerPort: 5432
           volumeMounts:
