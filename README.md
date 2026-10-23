@@ -28,3 +28,4 @@
 - [2.6](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.6/the_project_deploy)
 - [2.7](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.7/log_output_ping_pong)
 - [2.8](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.8/the_project_deploy)
+- [2.9](https://github.com/bciupka/DevOps-with-Kubernetes-2026/tree/2.9/the_project_deploy)
