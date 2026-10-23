@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: todo-cron-add-todo
+  namespace: project
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: todo-add
+              image: curlimages/curl:8.23.0
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -ec
+              args:
+                - |
+                  URL=$(curl -fsS -o /dev/null -w '%{redirect_url}' \
+                    https://en.wikipedia.org/wiki/Special:Random)
+
+                  test -n "$URL"
+
+                  curl -fsS \
+                  -H 'Content-Type: application/json' \
+                  -d "{\"description\":\"Read $URL\"}" \
+                  http://the-project-todo-back-svc:1234/api/todos
+
+  schedule: "0 * * * *"

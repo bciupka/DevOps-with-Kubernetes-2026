@@ -22,13 +22,11 @@
 
 - `kubectl apply -f manifests`
 
-## Configuration
-
-Runtime configuration is defined in `manifests/configmap.yaml` and `manifests/secret.yaml`.
-
 ## Endpoints
 
 - `/` - frontend
 - `/api/image` - cached image
 - `GET /api/todos` - list todos
 - `POST /api/todos` - create todo
+
+Cronjob adds a todo every hour.
