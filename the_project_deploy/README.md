@@ -30,3 +30,9 @@
 - `POST /api/todos` - create todo
 
 Cronjob adds a todo every hour.
+
+## Monitoring
+
+Follow the [monitoring setup](../monitoring/README.md) to install the charts and access Grafana.
+
+The backend logs received todos and rejects descriptions longer than 140 characters with HTTP 400.
